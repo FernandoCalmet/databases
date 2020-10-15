@@ -1,6 +1,16 @@
-# Databases
+# Databases Examples
 
-Modelos reutilizables de bases de datos para micro-proyectos.
+Modelos reutilizables de bases de datos para micro-proyectos o fines de aprendizaje.
+
+## Schemas
+
+- MySQL
+- MSSQL
+- JDBC
+
+## :page_facing_up: LICENCIA
+
+Licencia MIT. Puedes verla en el [Archivo de Licencia](https://github.com/FernandoCalmet/databases/blob/main/LICENSE) para más información.
 
 ---
 
