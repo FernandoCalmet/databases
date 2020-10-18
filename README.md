@@ -4,9 +4,9 @@ Modelos reutilizables de bases de datos para micro-proyectos o fines de aprendiz
 
 ## Schemas
 
-- MySQL
-- MSSQL
-- JDBC
+- [MySQL](https://github.com/FernandoCalmet/databases/tree/main/mysql)
+- [MSSQL](https://github.com/FernandoCalmet/databases/tree/main/mssql)
+- [JDBC](https://github.com/FernandoCalmet/databases/tree/main/jdbc)
 
 ## :page_facing_up: LICENCIA
 
