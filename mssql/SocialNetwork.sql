@@ -1,0 +1,165 @@
+USE [SocialNetwork]
+GO
+/****** Object:  Table [dbo].[Commentary] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Commentary](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+    [userId] [int] NOT NULL,
+	[postId] [int] NOT NULL,
+    [text] [nvarchar](max) NOT NULL,
+	[createdDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Commentary] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Like] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Like](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[userId] [int] NOT NULL,
+	[postId] [int] NOT NULL,
+	[likeTypeId] [int] NOT NULL,
+    [createdDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Like] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Post] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Post](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+    [userId] [int] NOT NULL,
+	[postTypeId] [int] NOT NULL,
+	[postSharedId] [int] NOT NULL,
+	[text] [nvarchar](max) NOT NULL,	
+    [createdDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Post] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LikeType] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[LikeType](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](100) NOT NULL,
+ CONSTRAINT [PK_LikeType] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[PostType] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[PostType](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+ CONSTRAINT [PK_PostType] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[User] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[User](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[email] [varchar](100) NOT NULL,
+	[phone] [varchar](20) NOT NULL,
+	[password] [varchar](16) NOT NULL,
+	[createdDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[Commentary]  WITH CHECK ADD  CONSTRAINT [FK_Commentary_Post] FOREIGN KEY([postId])
+REFERENCES [dbo].[Post] ([id])
+GO
+ALTER TABLE [dbo].[Commentary] CHECK CONSTRAINT [FK_Commentary_Post]
+GO
+ALTER TABLE [dbo].[Commentary]  WITH CHECK ADD  CONSTRAINT [FK_Commentary_User] FOREIGN KEY([userId])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Commentary] CHECK CONSTRAINT [FK_Commentary_User]
+GO
+ALTER TABLE [dbo].[Like]  WITH CHECK ADD  CONSTRAINT [FK_Like_Post] FOREIGN KEY([postId])
+REFERENCES [dbo].[Post] ([id])
+GO
+ALTER TABLE [dbo].[Like] CHECK CONSTRAINT [FK_Like_Post]
+GO
+ALTER TABLE [dbo].[Like]  WITH CHECK ADD  CONSTRAINT [FK_Like_LikeType] FOREIGN KEY([likeTypeId])
+REFERENCES [dbo].[LikeType] ([id])
+GO
+ALTER TABLE [dbo].[Like] CHECK CONSTRAINT [FK_Like_LikeType]
+GO
+ALTER TABLE [dbo].[Like]  WITH CHECK ADD  CONSTRAINT [FK_Like_User] FOREIGN KEY([userId])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Like] CHECK CONSTRAINT [FK_Like_User]
+GO
+ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_Post] FOREIGN KEY([postSharedId])
+REFERENCES [dbo].[Post] ([id])
+GO
+ALTER TABLE [dbo].[Post] CHECK CONSTRAINT [FK_Post_Post]
+GO
+ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_PostType] FOREIGN KEY([postTypeId])
+REFERENCES [dbo].[PostType] ([id])
+GO
+ALTER TABLE [dbo].[Post] CHECK CONSTRAINT [FK_Post_PostType]
+GO
+ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_User] FOREIGN KEY([userId])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Post] CHECK CONSTRAINT [FK_Post_User]
+GO
