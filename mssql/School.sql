@@ -1,0 +1,202 @@
+USE [School]
+GO
+/****** Object:  Table [dbo].[Class] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Class](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[courseId] [int] NULL,
+	[userId] [int] NULL,
+	[periodId] [int] NULL,
+	[capacity] [int] NULL,
+ CONSTRAINT [PK_Class] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Course] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Course](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+ CONSTRAINT [PK_Course] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Day] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Day](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+ CONSTRAINT [PK_Day] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Schedule] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Schedule](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[dayId] [int] NULL,
+    [classId] [int] NULL,
+	[startTime] [time](7) NULL,
+	[endTime] [time](7) NULL,	
+ CONSTRAINT [PK_Schedule] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[RecordBook] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RecordBook](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[userId] [int] NOT NULL,
+	[periodId] [int] NOT NULL,
+	[classId] [int] NOT NULL,
+	[qualification] [int] NULL,
+ CONSTRAINT [PK_RecordBook] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Period] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Period](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NOT NULL,
+	[startDate] [datetime] NULL,
+	[endDate] [datetime] NULL,
+ CONSTRAINT [PK_Period] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[UserType] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[UserType](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NULL,
+ CONSTRAINT [PK_UserType] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[User] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[User](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+    [typeId] [int] NOT NULL,
+	[firstName] [varchar](50) NOT NULL,
+	[lastName] [varchar](50) NOT NULL,
+	[birthday] [datetime] NULL,
+	[dni] [varchar](8) NOT NULL,	
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[Class]  WITH CHECK ADD  CONSTRAINT [FK_Class_Course] FOREIGN KEY([courseId])
+REFERENCES [dbo].[Course] ([id])
+GO
+ALTER TABLE [dbo].[Class] CHECK CONSTRAINT [FK_Class_Course]
+GO
+ALTER TABLE [dbo].[Class]  WITH CHECK ADD  CONSTRAINT [FK_Class_Period] FOREIGN KEY([periodId])
+REFERENCES [dbo].[Period] ([id])
+GO
+ALTER TABLE [dbo].[Class] CHECK CONSTRAINT [FK_Class_Period]
+GO
+ALTER TABLE [dbo].[Class]  WITH CHECK ADD  CONSTRAINT [FK_Class_User] FOREIGN KEY([userId])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[Class] CHECK CONSTRAINT [FK_Class_User]
+GO
+ALTER TABLE [dbo].[Schedule]  WITH CHECK ADD  CONSTRAINT [FK_Schedule_Class] FOREIGN KEY([classId])
+REFERENCES [dbo].[Class] ([id])
+GO
+ALTER TABLE [dbo].[Schedule] CHECK CONSTRAINT [FK_Schedule_Class]
+GO
+ALTER TABLE [dbo].[Schedule]  WITH CHECK ADD  CONSTRAINT [FK_Schedule_Day] FOREIGN KEY([dayId])
+REFERENCES [dbo].[Day] ([id])
+GO
+ALTER TABLE [dbo].[Schedule] CHECK CONSTRAINT [FK_Schedule_Day]
+GO
+ALTER TABLE [dbo].[RecordBook]  WITH CHECK ADD  CONSTRAINT [FK_RecordBook_Class] FOREIGN KEY([classId])
+REFERENCES [dbo].[Class] ([id])
+GO
+ALTER TABLE [dbo].[RecordBook] CHECK CONSTRAINT [FK_RecordBook_Class]
+GO
+ALTER TABLE [dbo].[RecordBook]  WITH CHECK ADD  CONSTRAINT [FK_RecordBook_Period] FOREIGN KEY([periodId])
+REFERENCES [dbo].[Period] ([id])
+GO
+ALTER TABLE [dbo].[RecordBook] CHECK CONSTRAINT [FK_RecordBook_Period]
+GO
+ALTER TABLE [dbo].[RecordBook]  WITH CHECK ADD  CONSTRAINT [FK_RecordBook_User] FOREIGN KEY([userId])
+REFERENCES [dbo].[User] ([id])
+GO
+ALTER TABLE [dbo].[RecordBook] CHECK CONSTRAINT [FK_RecordBook_User]
+GO
+ALTER TABLE [dbo].[User]  WITH CHECK ADD  CONSTRAINT [FK_User_UserType] FOREIGN KEY([typeId])
+REFERENCES [dbo].[UserType] ([id])
+GO
+ALTER TABLE [dbo].[User] CHECK CONSTRAINT [FK_User_UserType]
+GO
