@@ -111,6 +111,7 @@ CREATE TABLE [dbo].[Order](
 	[shipmentId] [int] NOT NULL,
 	[status] [varchar](30) NOT NULL,
 	[totalAmount] [int] NOT NULL,
+	[totalWeight] [decimal](18, 2) NOT NULL,
 	[totalTax] [decimal](18, 2) NULL,
 	[createdDate] [datetime] NOT NULL,
  CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED 
@@ -134,6 +135,7 @@ CREATE TABLE [dbo].[OrderDetails](
 	[quantity] [int] NOT NULL,
 	[price] [money] NOT NULL,
 	[tax] [decimal](18, 2) NULL,
+	[discount] [decimal](18, 2) NULL,
  CONSTRAINT [PK_OrderDetails] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -179,6 +181,7 @@ CREATE TABLE [dbo].[Product](
 	[upc] [varchar](12) NOT NULL,
 	[unitPrice] [money] NOT NULL,
 	[unitInStock] [int] NULL,
+	[weight] [decimal](18, 2) NOT NULL,
 	[createdDate] [datetime] NOT NULL,
  CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED 
 (
@@ -199,6 +202,7 @@ GO
 CREATE TABLE [dbo].[Shipment](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[addressId] [int] NOT NULL,
+	[supplierId] [int] NOT NULL,
 	[trackingId] [varchar](50) NOT NULL,
 	[status] [varchar](30) NOT NULL,
 	[provider] [nvarchar](100) NOT NULL,
@@ -212,6 +216,27 @@ CREATE TABLE [dbo].[Shipment](
 GO
 SET ANSI_PADDING OFF
 GO
+
+/****** Object:  Table [dbo].[ShipmentSupplier] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ShipmentSupplier](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_ShipmentSupplier] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
 ALTER TABLE [dbo].[Address]  WITH CHECK ADD  CONSTRAINT [FK_Address_Account] FOREIGN KEY([accountId])
 REFERENCES [dbo].[Account] ([id])
 GO
@@ -256,4 +281,9 @@ ALTER TABLE [dbo].[Shipment]  WITH CHECK ADD  CONSTRAINT [FK_Shipment_Address] F
 REFERENCES [dbo].[Address] ([id])
 GO
 ALTER TABLE [dbo].[Shipment] CHECK CONSTRAINT [FK_Shipment_Address]
+GO
+ALTER TABLE [dbo].[Shipment]  WITH CHECK ADD  CONSTRAINT [FK_Shipment_ShipmentSupplier] FOREIGN KEY([supplierId])
+REFERENCES [dbo].[ShipmentSupplier] ([id])
+GO
+ALTER TABLE [dbo].[Shipment] CHECK CONSTRAINT [FK_Shipment_ShipmentSupplier]
 GO
